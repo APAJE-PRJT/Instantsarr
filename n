@@ -1,0 +1,15 @@
+local HOLD_DURATION = 0
+
+local function SetPrompt(prompt)
+	if prompt:IsA("ProximityPrompt") and prompt.HoldDuration ~= HOLD_DURATION then
+		prompt.HoldDuration = HOLD_DURATION
+	end
+end
+
+-- Prompt yang sudah ada
+for _, obj in ipairs(workspace:GetDescendants()) do
+	SetPrompt(obj)
+end
+
+-- Prompt yang baru muncul
+workspace.DescendantAdded:Connect(SetPrompt)
