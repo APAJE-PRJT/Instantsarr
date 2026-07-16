@@ -1,15 +1,29 @@
-local HOLD_DURATION = 0
+local FAST = 0
+local Prompts = {}
 
-local function SetPrompt(prompt)
-	if prompt:IsA("ProximityPrompt") and prompt.HoldDuration ~= HOLD_DURATION then
-		prompt.HoldDuration = HOLD_DURATION
+local function AddPrompt(v)
+	if v:IsA("ProximityPrompt") then
+		Prompts[#Prompts + 1] = v
+		v.HoldDuration = FAST
 	end
 end
 
--- Prompt yang sudah ada
-for _, obj in ipairs(workspace:GetDescendants()) do
-	SetPrompt(obj)
+for _, v in ipairs(workspace:GetDescendants()) do
+	AddPrompt(v)
 end
 
--- Prompt yang baru muncul
-workspace.DescendantAdded:Connect(SetPrompt)
+workspace.DescendantAdded:Connect(AddPrompt)
+
+while task.wait(0.5) do
+	for i = #Prompts, 1, -1 do
+		local p = Prompts[i]
+
+		if p.Parent then
+			if p.HoldDuration ~= FAST then
+				p.HoldDuration = FAST
+			end
+		else
+			table.remove(Prompts, i)
+		end
+	end
+end
