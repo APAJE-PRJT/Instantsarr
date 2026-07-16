@@ -1,4 +1,4 @@
-local FAST = 0
+local FAST = 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001
 local Prompts = {}
 
 local function AddPrompt(v)
@@ -8,12 +8,15 @@ local function AddPrompt(v)
 	end
 end
 
+-- Ambil prompt sekali
 for _, v in ipairs(workspace:GetDescendants()) do
 	AddPrompt(v)
 end
 
+-- Tambah prompt baru
 workspace.DescendantAdded:Connect(AddPrompt)
 
+-- Loop ringan
 while task.wait(0.5) do
 	for i = #Prompts, 1, -1 do
 		local p = Prompts[i]
